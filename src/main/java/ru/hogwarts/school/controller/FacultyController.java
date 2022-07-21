@@ -48,12 +48,12 @@ public class FacultyController {
         return ResponseEntity.ok(facultyService.findByColor(color));
     }
 //    @GetMapping ("/students")
-//    public ResponseEntity<Collection <Student>> getStudentListByFacultyId(@RequestParam long id) {
+//    public ResponseEntity getStudentListByFacultyId(@RequestParam long id) {
 //        List <Student> students = facultyService.getAllStudentsByFacultyId(id);
 //        if (students==null) {
 //            return ResponseEntity.badRequest().build();
 //        }
-//        return ResponseEntity.ok(students);
+//        return ResponseEntity.ok(facultyService.getAllStudentsByFacultyId(id));
 //    }
 
     @GetMapping ("/get_by_color_and_name")

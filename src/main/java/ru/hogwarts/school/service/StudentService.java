@@ -50,11 +50,11 @@ public class StudentService {
         return studentRepository.findStudentByAgeBetween(min, max);
     }
 
-//    public Faculty getFacultyByStudentsId(long id) {
-//        Student student = studentRepository.findById(id).get();
-//        if (student == null) {
-//            return null;
-//        }
-//        return student.getFaculty();
-//    }
+    public Faculty getFacultyByStudentsId(long id) {
+        Student student = getStudent(id);
+        if (student == null) {
+            return null;
+        }
+        return student.getFaculty();
+    }
 }

@@ -31,7 +31,7 @@ public class StudentController {
         }
     }
 
-    @PutMapping
+    @PutMapping ("/update")
     public ResponseEntity<Student> changeStudent(@RequestBody Student changedStudent) { //update
         return ResponseEntity.ok(studentService.changeStudent(changedStudent));
     }
@@ -56,21 +56,21 @@ public class StudentController {
 
     @GetMapping("/age_between")
     public Collection<Student> getStudentsByAgeBetween(@RequestParam int min,
-                                                       @RequestParam  int max) {
+                                                       @RequestParam int max) {
 
         return studentService.findByAgeBetween(min, max);
     }
 
-//
-//    @GetMapping("/fac_by_st_id")
-//    public ResponseEntity<Faculty> getFacultyByStudentsId(@RequestParam long id) {
-//        Faculty faculty = studentService.getFacultyByStudentsId(id);
-//        if (faculty == null) {
-//            return ResponseEntity.badRequest().build();
-//
-//        }
-//        return ResponseEntity.ok(faculty);
-//    }
+
+    @GetMapping("/faculties")
+    public ResponseEntity<Faculty> getFacultyByStudentsId(@RequestParam long id) {
+        Faculty faculty = studentService.getFacultyByStudentsId(id);
+        if (faculty == null) {
+            return ResponseEntity.badRequest().build();
+
+        }
+        return ResponseEntity.ok(faculty);
+    }
 
 
     @GetMapping("/all")

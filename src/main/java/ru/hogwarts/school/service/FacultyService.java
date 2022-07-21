@@ -22,7 +22,7 @@ public class FacultyService {
     }
 
     public Faculty getFaculty(Long id) { // read
-        return facultyRepositoriy.findById(id).get();
+        return facultyRepositoriy.getFacultyById(id);
 
     }
 
@@ -51,7 +51,7 @@ public class FacultyService {
         return  facultyRepositoriy.getFacultiesByColorAndAndNameIgnoreCase(color,name);
     }
 //    public List<Student> getAllStudentsByFacultyId (long id) {
-//        Faculty faculty = getFaculty(id);
+//        Faculty faculty = facultyRepositoriy.getFacultyById(id);
 //        if (faculty==null) {
 //            return null;
 //        }
