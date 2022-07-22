@@ -20,7 +20,7 @@ public class FacultyController {
     }
 
     @PostMapping
-    public ResponseEntity<Faculty> createFaculty( @RequestBody Faculty faculty) { // create
+    public ResponseEntity<Faculty> createFaculty(@RequestBody Faculty faculty) { // create
         return ResponseEntity.ok(facultyService.createFaculty(faculty));
     }
 
@@ -47,22 +47,23 @@ public class FacultyController {
         }
         return ResponseEntity.ok(facultyService.findByColor(color));
     }
-//    @GetMapping ("/students")
-//    public ResponseEntity getStudentListByFacultyId(@RequestParam long id) {
-//        List <Student> students = facultyService.getAllStudentsByFacultyId(id);
-//        if (students==null) {
-//            return ResponseEntity.badRequest().build();
-//        }
-//        return ResponseEntity.ok(facultyService.getAllStudentsByFacultyId(id));
-//    }
 
-    @GetMapping ("/get_by_color_and_name")
-    public ResponseEntity<Faculty> getFacByColorAndNameIgnorCase(@RequestParam String color,
-                                                                 @RequestParam String name) {
-        if (color == null||name==null) {
+    @GetMapping("/students")
+    public ResponseEntity getStudentListByFacultyId(@RequestParam long id) {
+        List<Student> students = facultyService.getAllStudentsByFacultyId(id);
+        if (students == null) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(facultyService.getFacultiesByNameAndColorIgnorcase(color,name));
+        return ResponseEntity.ok(students);
+    }
+
+    @GetMapping("/get_by_color_and_name")
+    public ResponseEntity<Faculty> getFacByColorAndNameIgnorCase(@RequestParam String color,
+                                                                 @RequestParam String name) {
+        if (color == null || name == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(facultyService.getFacultiesByNameAndColorIgnorcase(color, name));
     }
 
     @PutMapping
