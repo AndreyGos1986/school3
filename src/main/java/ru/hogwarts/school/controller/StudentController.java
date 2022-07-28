@@ -18,11 +18,11 @@ public class StudentController {
     }
 
     @PostMapping
-    public ResponseEntity<Student> createStudent(@RequestBody Student student) { // create
-        return ResponseEntity.ok(studentService.createStudent(student));
+    public Student createStudent(@RequestBody Student student) { // create
+        return student;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<Student> getStudent(@PathVariable long id) { // read
         if (studentService.getAll().isEmpty() == false) {
             return ResponseEntity.ok(studentService.getStudent(id));
@@ -46,12 +46,8 @@ public class StudentController {
     }
 
     @GetMapping("/by_age")
-    public ResponseEntity<Collection<Student>> getStudentsByAge(@RequestParam int age) {
-        if (age > 0 & studentService.findByAge(age) != null) {
-            return ResponseEntity.ok(studentService.findByAge(age));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public Collection<Student> getStudentsByAge(@RequestParam int age) {
+              return studentService.findByAge(age);
     }
 
     @GetMapping("/age_between")
