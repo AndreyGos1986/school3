@@ -1,6 +1,7 @@
 package ru.hogwarts.school.service;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school.model.Avatar;
@@ -11,6 +12,7 @@ import javax.transaction.Transactional;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
@@ -54,23 +56,10 @@ public class AvatarService {
         return avatarRepository.findByStudentId(id).orElse(new Avatar());
     }
 
-    //    private byte[] genPreview (Path filePath) throws IOException {
-//
-//        try (InputStream inputStream = Files.newInputStream(filePath);
-//             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream,1024);
-//             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()){
-//                 BufferedImage image = ImageIO.read(bufferedInputStream);
-//
-//                 int height = image.getHeight()/(image.getWidth()/100);
-//                 BufferedImage preview = new BufferedImage(100,height,image.getType());
-//                 Graphics2D graphics = preview.createGraphics();
-//                 graphics.drawImage(image,0,0,100,height,null);
-//                 graphics.dispose();
-//                 ImageIO.write(preview,getExtension(filePath.getFileName().toString()),byteArrayOutputStream);
-//                 return byteArrayOutputStream.toByteArray();
-//
-//        }
-//    }
+   public List <Avatar> getAvatarsOnPages (int num, int size) {
+            return avatarRepository.findAll(PageRequest.of(num - 1, size)).getContent();
+        }
+
     private String getExtension(String fileName) {
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }

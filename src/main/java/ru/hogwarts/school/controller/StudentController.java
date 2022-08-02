@@ -31,7 +31,7 @@ public class StudentController {
         }
     }
 
-    @PutMapping ("/update")
+    @PutMapping("/update")
     public ResponseEntity<Student> changeStudent(@RequestBody Student changedStudent) { //update
         return ResponseEntity.ok(studentService.changeStudent(changedStudent));
     }
@@ -47,7 +47,7 @@ public class StudentController {
 
     @GetMapping("/by_age")
     public Collection<Student> getStudentsByAge(@RequestParam int age) {
-              return studentService.findByAge(age);
+        return studentService.findByAge(age);
     }
 
     @GetMapping("/age_between")
@@ -77,6 +77,29 @@ public class StudentController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/count")
+    public ResponseEntity<Integer> getStudentsCount() {
+        if (studentService.getAll() != null) {
+            return ResponseEntity.ok(studentService.getStudentsQuantity());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/average_age")
+    public ResponseEntity<Double> getAverageAgeOfStudents() {
+        return ResponseEntity.ok(studentService.getAverageAgeOfStudents());
+    }
+    @GetMapping("/last_five_students")
+    public ResponseEntity<List<Student>> getLastFiveStudents() {
+        if (studentService.getAll() != null && studentService.getAll().size() > 5) {
+            return ResponseEntity.ok(studentService.getLastFiveStudents());
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
 }
 
 

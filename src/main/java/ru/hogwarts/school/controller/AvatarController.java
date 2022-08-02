@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 @RestController()
 @RequestMapping("/avatars")
@@ -64,4 +65,8 @@ public class AvatarController {
                 .body(avatar.getPreview());
     }
 
+    @GetMapping("/findAll")
+    public List<Avatar> findAll(@RequestParam int number, @RequestParam int size) {
+        return avatarService.getAvatarsOnPages(number, size);
+    }
 }
