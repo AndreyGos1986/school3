@@ -5,7 +5,7 @@ CREATE TABLE Drivers
     Driver_surname  VARCHAR NOT NULL,
     Driver_age      INTEGER CHECK ( Driver_age >= 18),
     Drivers_license BOOLEAN,
-    Car             INTEGER REFERENCES cars (id)
+    Car_id          BIGINT
 );
 
 CREATE TABLE Cars
@@ -13,5 +13,6 @@ CREATE TABLE Cars
     Id    SERIAL PRIMARY KEY ,
     Brand VARCHAR NOT NULL,
     Model VARCHAR NOT NULL,
-    Price INTEGER CHECK ( Price > 0 )
+    Price INTEGER CHECK ( Price > 0 ),
+    Owner INTEGER REFERENCES  Drivers (id)
 );
