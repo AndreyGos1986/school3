@@ -1,5 +1,7 @@
 package ru.hogwarts.school.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -24,13 +26,17 @@ public class AvatarService {
     private String avatarsDir;
     private final StudentService studentService;
     private final AvatarRepository avatarRepository;
+    private Logger avatarServiceLogger = LoggerFactory.getLogger(AvatarService.class);
+
 
     public AvatarService(StudentService studentService, AvatarRepository avatarRepository) {
         this.studentService = studentService;
         this.avatarRepository = avatarRepository;
+        avatarServiceLogger.info("Сервис работы с аватарками запущен");
     }
 
     public void postAvatar(long stuId, MultipartFile file) throws IOException {
+        avatarServiceLogger.info("Загрузка картинки для студента по его Id");
         Student student = studentService.getStudent(stuId);
         Path path = Path.of(avatarsDir, stuId + "." + getExtension(file.getOriginalFilename()));
         Files.createDirectories(path.getParent());
@@ -44,20 +50,28 @@ public class AvatarService {
             bis.transferTo(bos);
         }
         Avatar avatar = findAvatar(stuId);
+        if (avatar!=null) {
+            avatarServiceLogger.info("Картинка прикрепляется к указанному по Id студету");
+        } else {
+            avatarServiceLogger.info (" Методом findAvatar() cоздаётся новый аватар");
+        }
         avatar.setStudent(student);
         avatar.setFilePath(path.toString());
         avatar.setFileSize(file.getSize());
         avatar.setMediaType(file.getContentType());
         avatar.setPreview(file.getBytes());
         avatarRepository.save(avatar);
+
     }
 
     public Avatar findAvatar(Long id) {
+        avatarServiceLogger.info("Поиск картинки по указанному Id, а в случае необнаружения, создание новой картинки");
         return avatarRepository.findByStudentId(id).orElse(new Avatar());
-    }
+        }
 
    public List <Avatar> getAvatarsOnPages (int num, int size) {
-            return avatarRepository.findAll(PageRequest.of(num - 1, size)).getContent();
+       avatarServiceLogger.info("По-страничный вывод картинок по указанной странице и её размеру");
+       return avatarRepository.findAll(PageRequest.of(num - 1, size)).getContent();
         }
 
     private String getExtension(String fileName) {
