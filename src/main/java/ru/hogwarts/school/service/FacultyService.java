@@ -8,9 +8,11 @@ import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repositories.FacultyRepository;
 
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class FacultyService {
@@ -73,6 +75,36 @@ public class FacultyService {
         }
         facultyServiceLogger.info("Формирование списка найденных студентов");
         return faculty.getStudents().stream().toList();
+    }
+
+    public String getTheMostLongerNameOfTheFaculty() {
+        return facultyRepositoriy.findAll().stream()
+                .parallel() // в данном случае бессмысленно
+                .map(a -> a.getName())
+                .max((a,b) -> a.length() - b.length()).orElseThrow();
+    }
+
+    public Integer getSum(Integer variants) {
+        final int size = 1_000_000;
+        switch(variants) {
+            case 0:
+                return Stream.iterate(1, a -> a + 1).limit(size).reduce(0, (a, b) -> a + b );
+            case 1:
+                return Stream.iterate(1, a -> a + 1).parallel().limit(size).reduce(0, (a, b) -> a + b );
+            case 2:
+                int sum = 0;
+                for (int i = 0; i < size; i++) {
+                    sum += (i + 1);
+                }
+                return sum;
+            case 3:
+                int[] testArray = new int[size];
+                for (int i = 0; i < size; i++) {
+                    testArray[i] = (i + 1);
+                }
+                return Arrays.stream(testArray).sum();
+        }
+        throw new RuntimeException("Что-то пошло не так");
     }
 
 }

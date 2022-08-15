@@ -99,6 +99,20 @@ public class StudentController {
             return ResponseEntity.badRequest().build();
         }
     }
+    @GetMapping("/st_name_begin_a")
+    public ResponseEntity<List<String>> getAllStudentsWhoNameBeginsFromA() {
+        if (studentService.getAll() != null) {
+            return ResponseEntity.ok(studentService.getAllStudentsWhoNameBeginsFromA());
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/average_age_by_stream")
+    public ResponseEntity<Double> getAverageAgeofSrudentsByStream() {
+         return ResponseEntity.ok(studentService.getAverageAgeOfStudentsByStream ());
+
+    }
 
 }
 

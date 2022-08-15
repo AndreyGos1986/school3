@@ -84,4 +84,24 @@ public class StudentService {
         studentServiceLogger.info("Получить список из последних пяти студентов");
         return studentRepository.getLastFiveStudents();
     }
+
+    public List<String> getAllStudentsWhoNameBeginsFromA() {
+        return studentRepository
+                .findAll()
+                .stream()
+                .filter(Objects::nonNull)
+            //    .parallel() //в принципе, тут ни к чему параллелить, т.к. полтора студента
+                .map(student -> student.getName().toUpperCase())
+                .filter(student -> student.startsWith("A"))
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
+    public Double getAverageAgeOfStudentsByStream() {
+        return studentRepository.findAll().stream()
+                .filter(Objects::nonNull)
+            //    .parallel() //в принципе, тут ни к чему параллелить, также, как и выше
+                .mapToDouble(value -> value.getAge())
+                .average().orElseThrow();
+    }
 }

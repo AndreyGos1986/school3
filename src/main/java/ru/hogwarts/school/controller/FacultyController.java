@@ -81,4 +81,14 @@ public class FacultyController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    @GetMapping("/get_the_most_longer_name_of_faculty")
+    public ResponseEntity<String> getTheMostLongerNameOfTheFaculty() {
+        return ResponseEntity.ok(facultyService.getTheMostLongerNameOfTheFaculty ());
+    }
+
+    @GetMapping("/getSum/{var}")
+    public ResponseEntity getSum(@PathVariable Integer var) {
+        return ResponseEntity.ok(facultyService.getSum(var));
+    }
 }
