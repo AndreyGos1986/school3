@@ -90,7 +90,7 @@ public class StudentService {
                 .findAll()
                 .stream()
                 .filter(Objects::nonNull)
-            //    .parallel() //в принципе, тут ни к чему параллелить, т.к. полтора студента
+                //    .parallel() //в принципе, тут ни к чему параллелить, т.к. полтора студента
                 .map(student -> student.getName().toUpperCase())
                 .filter(student -> student.startsWith("A"))
                 .sorted()
@@ -100,8 +100,81 @@ public class StudentService {
     public Double getAverageAgeOfStudentsByStream() {
         return studentRepository.findAll().stream()
                 .filter(Objects::nonNull)
-            //    .parallel() //в принципе, тут ни к чему параллелить, также, как и выше
+                //    .parallel() //в принципе, тут ни к чему параллелить, также, как и выше
                 .mapToDouble(value -> value.getAge())
                 .average().orElseThrow();
+    }
+
+    public void getAllStudentsBySynchroThreads () {
+        List <Student> studentListForThreads= studentRepository.findAll()
+                .stream()
+                .collect(Collectors.toList());
+        studentServiceLogger.info("Сборка студентов в список");
+        Runnable mainThread = () -> {
+        synchronized (studentRepository) {
+            studentServiceLogger.info("Первые 2 студента в основном потоке");
+            printStudent(0);
+            printStudent(1);
+        }
+     };
+        Thread thread1 = new Thread(()-> {
+            synchronized (studentRepository) {
+                studentServiceLogger.info("Следующие 2 студента во втором потоке");
+                printStudent(2);
+                printStudent(3);
+            }
+        });
+
+        Thread thread2 = new Thread(()-> {
+            synchronized (studentRepository) {
+                studentServiceLogger.info("Следующие 2 студента во третьем потоке");
+                printStudent(4);
+                printStudent(5);
+            }
+        });
+        studentServiceLogger.info("Запуск потоков");
+        mainThread.run();
+        thread1.start();
+        thread2.start();
+
+    }
+
+    private void  printStudent (long id) {
+        Student student = studentRepository.findById(id).get();
+        System.out.println(student.getName() + ""
+                + student.getAge() + ""
+                +student.getFaculty() + ""
+                +student.getId());
+    }
+
+    public void getAllStudentsByThreads() {
+        studentServiceLogger.info("Сборка студентов в список");
+        List <Student> studentListForSynhroThreads= studentRepository
+                .findAll()
+                .stream()
+                .collect(Collectors.toList());
+        studentServiceLogger.info("Вывод 2 студентов в основном потоке");
+
+        Runnable main = ()-> {
+            printStudent(0);
+            printStudent(1);
+        };
+        studentServiceLogger.info("Вывод 2 студентов во втором потоке");
+
+        Thread thread1 = new Thread(()-> {
+           printStudent(2);
+           printStudent(3);
+       });
+        studentServiceLogger.info("Вывод 2 студентов в третьем потоке");
+
+        Thread thread2 = new Thread(()-> {
+            printStudent(4);
+            printStudent(5);
+        });
+
+        studentServiceLogger.info("Запуск потоков");
+        main.run();
+        thread1.start();
+        thread2.start();
     }
 }

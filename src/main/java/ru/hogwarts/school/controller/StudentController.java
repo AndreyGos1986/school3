@@ -71,11 +71,8 @@ public class StudentController {
 
     @GetMapping("/all")
     public ResponseEntity<Collection<Student>> getAllStudents() {
-        if (studentService.getAll().isEmpty() == false) {
             return ResponseEntity.ok(studentService.getAll());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+
     }
 
     @GetMapping("/count")
@@ -111,6 +108,16 @@ public class StudentController {
     @GetMapping("/average_age_by_stream")
     public ResponseEntity<Double> getAverageAgeofSrudentsByStream() {
          return ResponseEntity.ok(studentService.getAverageAgeOfStudentsByStream ());
+
+    }
+        @GetMapping("/print_by_thread")
+    public void getAllStudentsByThreads() {
+          studentService.getAllStudentsByThreads();
+
+    }
+    @GetMapping("/synchro_print")
+    public void getAllStudentsBySynchroThreads() {
+        studentService.getAllStudentsBySynchroThreads();
 
     }
 
